@@ -8,10 +8,13 @@ public:
     Element<T>* push(T data) override {
         Element<T>* node = new Element<T>(data, NULL, NULL);
         Element<T>* current = DListQueue<T>::head;
-        while(*current < data) {
-            if(current->getNext() == NULL)
+        while(current != NULL) {
+            if(*current > data)
                 break;
-
+            current = current->getNext();
         }
+        Element<T>* prev = current->getPrevious();
+        connectNodes(prev, node);
+        connectNodes(node, current);
     }
 };

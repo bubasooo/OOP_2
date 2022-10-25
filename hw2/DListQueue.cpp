@@ -49,7 +49,10 @@ protected:
 };
 
 template<class T>
-DListQueue<T> filter(bool(*predicat)(T) ,DListQueue<T>& lst);
+DListQueue<T>& filter(bool(*predicat)(T) ,DListQueue<T>& lst) {
+    DListQueue<T> newLst = new DListQueue<T>();
+
+}
 
 
 
