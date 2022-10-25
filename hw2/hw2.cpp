@@ -38,7 +38,7 @@ public:
     virtual T getValue() { return field; }
     virtual void setValue(T value) { field = value; }
 
-    //template<class T>
+    template<class>
     friend ostream& operator<< (ostream& ustream, Element<T>& obj);
 
 };
@@ -98,9 +98,11 @@ public:
         return cur;
     }
 
-    friend ostream& operator<< (ostream& ustream, LinkedListParent<T>& obj);
+    template<class E>
+    friend ostream& operator<< (ostream& ustream, LinkedListParent<E>& obj);
 
-    friend istream& operator>> (istream& ustream, LinkedListParent<T>& obj);
+    template<class E>
+    friend istream& operator>> (istream& ustream, LinkedListParent<E>& obj);
 };
 
 template<class T>
@@ -116,15 +118,14 @@ ostream& operator << (ostream& ustream, LinkedListParent<T>&obj) {
     ustream << "\nLength: " << obj.num << "\n";
     int i = 0;
 
-    for (Element<T>* current = obj.getBegin(); current != NULL;
-         current = current->getNext(), i++)
-        ustream << "arr[" << i << "] = " << current->getValue()
-                << "\n";
+    for (Element<T>* current = obj.getBegin(); current != NULL; current = current->getNext(), i++)
+        ustream << "arr[" << i << "] = " << current->getValue() << "\n";
 
     return ustream;
 }
 
-template<class T> istream& operator >> (istream& ustream, LinkedListParent<T>& obj)
+template<class T>
+istream& operator >> (istream& ustream, LinkedListParent<T>& obj)
 {
     //чтение из файла и консоли совпадают
     int len;
