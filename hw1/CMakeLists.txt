@@ -6,5 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 include_directories(.)
 
 add_executable(hw1
-        hw1.cpp
-        hw1.h)
+        Complex.cpp
+        main.cpp
+        Human.cpp
+        hw1.cpp)
