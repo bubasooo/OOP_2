@@ -2,7 +2,7 @@
 // Created by c4lculater on 25.10.2022.
 //
 
-#include "hw2.h"
+
 
 #include <iostream>
 
@@ -23,7 +23,7 @@ public:
     {
         field = value;
         next = next_ptr;
-        prev - prev_ptr;
+        prev = prev_ptr;
     }
     //доступ к полю *next
     virtual Element* getNext() { return next; }
@@ -104,7 +104,7 @@ public:
     template<class E>
     friend istream& operator>> (istream& ustream, LinkedListParent<E>& obj);
 };
-
+/*
 template<class T>
 ostream& operator << (ostream& ustream, LinkedListParent<T>&obj) {
     if (typeid(ustream).name() == typeid(ofstream).name())
@@ -123,7 +123,7 @@ ostream& operator << (ostream& ustream, LinkedListParent<T>&obj) {
 
     return ustream;
 }
-
+*/
 template<class T>
 istream& operator >> (istream& ustream, LinkedListParent<T>& obj)
 {
