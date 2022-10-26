@@ -28,4 +28,5 @@ public:
             DListQueue<T>::head = node;
         return node;
     }
+
 };

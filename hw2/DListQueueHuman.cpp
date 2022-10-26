@@ -29,4 +29,15 @@ public:
             OrderD<Human>::head = node;
         return node;
     }
+    Element<Human>* pop() override {
+        if(OrderD<Human>::head == NULL)
+            throw;
+        Element<Human>* removeNode = OrderD<Human>::head;
+        Element<Human>* nextAfterHead = OrderD<Human>::head->getNext();
+        OrderD<Human>::head = nextAfterHead;
+        nextAfterHead->setPrevious(NULL);
+        OrderD<Human>::num--;
+        delete removeNode;
+
+    }
 };

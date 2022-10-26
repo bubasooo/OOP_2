@@ -28,11 +28,12 @@ public:
     Element<T>* pop() override {
         if(LinkedListParent<T>::head == NULL)
             throw;
+        Element<T>* removeNode = LinkedListParent<T>::head;
         Element<T>* nextAfterHead = LinkedListParent<T>::head->getNext();
         LinkedListParent<T>::head = nextAfterHead;
         nextAfterHead->setPrevious(NULL);
         LinkedListParent<T>::num--;
-
+        delete removeNode;
     }
     ~DListQueue() {
         Element<T>* current = LinkedListParent<T>::head;
