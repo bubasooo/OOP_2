@@ -35,7 +35,7 @@ void push(list<T>& lst, T element) {
 template<class T>
 T pop(list<T>& lst , T element) {
     lst.remove(element);
-    return *(lst.begin);
+    return *(lst.begin());
 }
 
 
@@ -56,9 +56,5 @@ void showList(list<T>& lst) {
         pointer++;
     }
 }
-/*
-bool pred(char a) {
-    return a != 'I';
-}
-*/
+
 
