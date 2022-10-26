@@ -9,8 +9,8 @@ public:
     DListQueueIterator() {}
     DListQueueIterator(Element<T>* p) { ptr = p; }
 
-    T operator*() {
-        return ptr->getValue();
+    Element<T>& operator*(){
+        return *ptr;
     }
 
     DListQueueIterator<T>& operator ++ () {

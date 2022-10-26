@@ -3,8 +3,30 @@
 //
 
 #include "OrderD.cpp"
-#include "../hw1/Human.cpp"
+#include "Human.cpp"
 
-class DListQueueIterator : OrderD<Human> {
+class DListQueueHuman : OrderD<Human> {
+public:
+    Element<Human>* push(Human man) override {
+        Element<Human>* node = new Element<Human>(man, NULL,NULL);
+        DListQueueIterator<Human> current = begin();
+        if(OrderD<Human>::head == NULL) {
+            OrderD<Human>::head = node;
+            OrderD<Human>::tail->setPrevious(node);
+            return node;
+        }
+        while(current != end()) {
+            if((*current).getValue() > man)
+                break;
+            current++;
+        }
 
+        DListQueueIterator<Human> prev = current--;
+        connectNodes(node,&(*current));
+        connectNodes(&(*prev), node);
+        OrderD<Human>::num++;
+        if(&(*current) == OrderD<Human>::head)
+            OrderD<Human>::head = node;
+        return node;
+    }
 };

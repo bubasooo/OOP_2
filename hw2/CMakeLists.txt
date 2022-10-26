@@ -10,4 +10,4 @@ add_executable(hw2
         OrderD.cpp
         DListQueue.cpp
         hw2.cpp
-        main.cpp DListQueueHuman.cpp)
+        main.cpp DListQueueHuman.cpp Human.cpp)

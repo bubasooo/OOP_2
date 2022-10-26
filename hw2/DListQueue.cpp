@@ -79,7 +79,7 @@ ostream& operator << (ostream& ustream, DListQueue<T>& lstq) {
     DListQueueIterator<T> current = lstq.begin();
     //ListIterator<T> current = lstq.begin();
     while(current != lstq.end()){
-        ustream << "arr[" << i << "] = " << *current << "\n";
+        ustream << "arr[" << i << "] = " <<  (*current).getValue() << "\n";
         current++;
         i++;
     }
