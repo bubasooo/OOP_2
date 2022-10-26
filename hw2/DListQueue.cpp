@@ -6,17 +6,21 @@
 template<class T>
 class DListQueue : public IteratedLinkedList<T> {
 public:
-    DListQueue() {}
+    DListQueue() {
+        IteratedLinkedList<T>::tail = new Element<T>(NULL,NULL,NULL);
+    }
     Element<T>* push(T data) override { //добавляетт элемент в конец
         Element<T>* node = new Element<T>(data,NULL,NULL);
         if(LinkedListParent<T>::head == NULL) {
             LinkedListParent<T>::head = node;
-            LinkedListParent<T>::tail = node;
+            LinkedListParent<T>::tail->setPrevious(node);
             LinkedListParent<T>::num++;
             return node;
         }
-        connectNodes(LinkedListParent<T>::tail, node);
-        LinkedListParent<T>::tail = node;
+        connectNodes(LinkedListParent<T>::tail->getPrevious(), node);
+        //LinkedListParent<T>::tail = node;
+        //LinkedListParent<T>::tail->setPrevious(node);
+        connectNodes(node, LinkedListParent<T>::tail);
         LinkedListParent<T>::num++;
         return node;
     }
@@ -46,7 +50,7 @@ public:
         return it;
     }
     DListQueueIterator<T> end() { //доделать бага на энд
-        DListQueueIterator<T> it = DListQueueIterator<T>(LinkedListParent<T>::tail->getNext());
+        DListQueueIterator<T> it = DListQueueIterator<T>(LinkedListParent<T>::tail/*->getNext()*/);
         return it;
     }
     /*
@@ -54,17 +58,17 @@ public:
     friend ostream& operator << (ostream& ustream, DListQueue<E>& lstq);
     */
 protected:
-    void connectNodes(Element<T>* current,Element<T>* other) {
+    void connectNodes(Element<T>* current,Element<T>* next) {
         if(current == NULL) {
-            other->setPrevious(current);
+            next->setPrevious(current);
             return;
         }
-        if(other == NULL) {
-            current->setNext(other);
+        if(next == NULL) {
+            current->setNext(next);
             return;
         }
-        current->setNext(other);
-        other->setPrevious(current);
+        current->setNext(next);
+        next->setPrevious(current);
     }
 };
 
