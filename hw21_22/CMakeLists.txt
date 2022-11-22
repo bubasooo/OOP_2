@@ -5,8 +5,15 @@ set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
+#add_executable(hw21_22
+#        main.cpp
+#        #tests.cpp
+#        task22.cpp
+#        task21.cpp
+#        bibl.h
+#                )
 add_executable(hw21_22
-        task21.cpp
+        main.cpp
         task22.cpp
-        tests.cpp
-                )
+        task21.cpp
+        )

@@ -1,16 +1,14 @@
-//
-// Created by c4lculater on 08.11.2022.
-//
+
+
 
 #include "task21.cpp"
-#include <vector>
+
+using namespace std;
 
 template<class K, class V>
 typename multimap<K,V>::iterator searchByValueMulti(multimap<K , V>& enterMap , V value) {
     typename multimap<K,V>::iterator it_mapus = enterMap.begin();
-    while(it_mapus != enterMap.end()) {
-        if(it_mapus->second == value)
-            return it_mapus;
+    while(it_mapus != enterMap.end() && it_mapus->second != value) {
         it_mapus++;
     }
     return it_mapus;
@@ -18,7 +16,10 @@ typename multimap<K,V>::iterator searchByValueMulti(multimap<K , V>& enterMap , 
 
 template<class K, class V>
 typename multimap<K,V>::iterator searchByKeyMulti(multimap<K , V>& enterMap , K key) {
-    typename multimap<K, V>::iterator it_mapus = enterMap.find(key);
+    typename multimap<K, V>::iterator it_mapus = enterMap.begin();
+    while(it_mapus != enterMap.end() && it_mapus->first != key) {
+        it_mapus++;
+    }
     return it_mapus;
 }
 
@@ -65,7 +66,3 @@ vector<V> retElementsBySameKeys(multimap<K,V>& enterMap,K key) {
     return valuesWithSameKeys;
 }
 
-int main() {
-    cout <<"Nice";
-    return 0;
-}

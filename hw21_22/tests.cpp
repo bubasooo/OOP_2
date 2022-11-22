@@ -1,6 +1,10 @@
 //
 // Created by c4lculater on 08.11.2022.
 //
+//#include "task22.cpp"
+//#include "bibl.h"
+//#include "task21.cpp"
+//#include "task22.cpp"
 #include "task22.cpp"
 
 using namespace std;
@@ -44,7 +48,7 @@ void getByValueTEST2() {
 
 
 
-//bool getByKeyTEST() {
+//void getByKeyTEST1() {
 //    map<string, int> marks;
 //    marks["Petrov"] = 5;
 //    marks["Ivanov"] = 4;
@@ -52,16 +56,37 @@ void getByValueTEST2() {
 //    marks["Nikolaev"] = 3;
 //    marks["Abramov"] = 4;
 //
-//    bool testingScore;
 //
-//    map<string , int>::iterator search = searchByKey(marks , "Ivanov");
-//    testingScore = search == marks.end() ? false : true;
+//    auto search = searchByKey(marks, "Ivanov");
+//    if (search == marks.end())
+//        cout << "Not Found \n";
+//    else
+//        cout << search->first << " -> " << search->second;
 //
-//    map<string , int>::iterator search2 = searchByKey(marks , "Bubich");
-//    testingScore &= search2 == marks.end() ? true : false;
-//
-//    return testingScore;
 //}
+//
+//void getByKeyTEST2() {
+//    map<string, int> marks;
+//    marks["Petrov"] = 5;
+//    marks["Ivanov"] = 4;
+//    marks["Sidorov"] = 5;
+//    marks["Nikolaev"] = 3;
+//    marks["Abramov"] = 4;
+//
+//    auto search = searchByKey(marks , "Bubich");
+//    if(search)
+//}
+
+bool testPredict(map<string , int>::iterator it) {
+    return it->second > 4;
+}
+
+//template<class K, class V>
+//typename map<K,V>::iterator searchByKey(map<K , V>& enterMap , K key) {
+//    typename map<K, V>::iterator it_mapus = enterMap.find(key);
+//    return it_mapus;
+//}
+
 void filterTEST() {
     map<string, int> marks;
     marks["Petrov"] = 5;
@@ -70,9 +95,10 @@ void filterTEST() {
     marks["Nikolaev"] = 3;
     marks["Abramov"] = 4;
 
-    map<string ,int> newMap = filter(testPedict, marks);
+    map<string ,int> newMap = filter(testPredict, marks);
     showTree(newMap);
 }
+
 
 void retUniqValuesTEST() {
     map<string, int> marks;
@@ -99,3 +125,4 @@ void retElementsBySameKeysTEST() {
     for(auto v: val)
         cout << v << '\n';
 }
+

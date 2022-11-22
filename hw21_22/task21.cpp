@@ -1,28 +1,28 @@
-//
-// Created by c4lculater on 08.11.2022.
-//
 
 
-#include <map>
 #include <iostream>
+#include <map>
 #include <set>
+#include <vector>
 
 using namespace std;
 
 template<class K, class V>
 typename map<K,V>::iterator searchByValue(map<K , V>& enterMap , V value) {
     typename map<K,V>::iterator it_mapus = enterMap.begin();
-    while(it_mapus != enterMap.end()) {
-        if(it_mapus->second == value)
-            return it_mapus;
+    while(it_mapus != enterMap.end() && it_mapus->second != value) {
         it_mapus++;
     }
     return it_mapus;
 }
 
+
 template<class K, class V>
 typename map<K,V>::iterator searchByKey(map<K , V>& enterMap , K key) {
-    typename map<K, V>::iterator it_mapus = enterMap.find(key);
+    typename map<K,V>::iterator it_mapus = enterMap.begin();
+    while(it_mapus != enterMap.end() && it_mapus->first != key) {
+        it_mapus++;
+    }
     return it_mapus;
 }
 
@@ -46,10 +46,6 @@ map<K, V> filter(bool(*predicat)(typename map<K, V>::iterator), map<K, V>& enter
     return newMap;
 }
 
-bool testPedict(map<string , int>::iterator it) {
-    return it->second > 4;
-}
-
 template <class K, class V>
 set<V> retUniqValues(map<K, V>& enterMap) {
     typename map<K, V>::iterator it_mapus = enterMap.begin();
@@ -61,8 +57,3 @@ set<V> retUniqValues(map<K, V>& enterMap) {
     return newSet;
 }
 
-
-//
-//int main() {
-//
-//}
