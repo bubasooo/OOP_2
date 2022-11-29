@@ -1,20 +1,19 @@
 //
-// Created by c4lculater on 28.11.2022.
+// Created by c4lculater on 29.11.2022.
 //
+#include "BinTreeKV.cpp"
 
-#include "BinTree.cpp"
-
-template<class T>
-class AVLTree : public Tree<T> {
+template<class K,class V>
+class AVLTreeKV : public BinTreeKV<K,V> {
 
     const bool LEFT = true;
     const bool RIGHT = false;
     //delta(a) = h(La) - h(Ra)
 
-    void disconnectNode(Node<T>* node) {
-        Node<T>* parentNode = node->getParent();
-        Node<T>* childR = node->getRight();
-        Node<T>* childL = node->getLeft();
+    void disconnectNode(NodeKV<K,V>* node) {
+        NodeKV<K,V>* parentNode = node->getParent();
+        NodeKV<K,V>* childR = node->getRight();
+        NodeKV<K,V>* childL = node->getLeft();
 
         if(parentNode != NULL) {
             if (node == parentNode->getLeft())
@@ -35,7 +34,7 @@ class AVLTree : public Tree<T> {
         }
     }
 
-    void connectNodes(Node<T>* node, Node<T>* nodeToConnect,bool side) {
+    void connectNodes(NodeKV<K,V>* node, NodeKV<K,V>* nodeToConnect,bool side) {
         if(node != NULL) {
             if (side == LEFT)
                 node->setLeft(nodeToConnect);
@@ -47,9 +46,9 @@ class AVLTree : public Tree<T> {
     }
 
 
-    void movement(Node<T>* nodeIB, Node<T>* childOfInbalance, bool sideOfInbalance, Node<T>* brotherOfInbalance) {
-        Node<T>* childLeft = childOfInbalance->getLeft();
-        Node<T>* childRight = childOfInbalance->getRight();
+    void movement(NodeKV<K,V>* nodeIB, NodeKV<K,V>* childOfInbalance, bool sideOfInbalance, NodeKV<K,V>* brotherOfInbalance) {
+        NodeKV<K,V>* childLeft = childOfInbalance->getLeft();
+        NodeKV<K,V>* childRight = childOfInbalance->getRight();
 
         disconnectNode(childOfInbalance);
         disconnectNode(nodeIB);
@@ -87,10 +86,10 @@ class AVLTree : public Tree<T> {
     }
 
 
-    void balanceDBZero(Node<T>* nodeIB, bool sideOfInbalacne, bool whereNodeIB) {
-        Node<T>* parent = nodeIB->getParent();
-        Node<T>* childL = nodeIB->getLeft();
-        Node<T>* childR = nodeIB->getRight();
+    void balanceDBZero(NodeKV<K,V>* nodeIB, bool sideOfInbalacne, bool whereNodeIB) {
+        NodeKV<K,V>* parent = nodeIB->getParent();
+        NodeKV<K,V>* childL = nodeIB->getLeft();
+        NodeKV<K,V>* childR = nodeIB->getRight();
 
         if(sideOfInbalacne == LEFT) {
             auto c = childR;
@@ -107,10 +106,10 @@ class AVLTree : public Tree<T> {
 
     }
 
-    void balanceDBMinusOne(Node<T>* nodeIB, bool sideOfInbalacne, bool whereNodeIB) {
-        Node<T>* parent = nodeIB->getParent();
-        Node<T>* childL = nodeIB->getLeft();
-        Node<T>* childR = nodeIB->getRight();
+    void balanceDBMinusOne(NodeKV<K,V>* nodeIB, bool sideOfInbalacne, bool whereNodeIB) {
+        NodeKV<K,V>* parent = nodeIB->getParent();
+        NodeKV<K,V>* childL = nodeIB->getLeft();
+        NodeKV<K,V>* childR = nodeIB->getRight();
 
         if(sideOfInbalacne == LEFT) {
             auto c = childR;
@@ -125,9 +124,9 @@ class AVLTree : public Tree<T> {
         nodeIB->setHeight(nodeIB->getHeight() - 2);
     }
 
-    void balanceDBPlusOne(Node<T>* nodeIB, bool sideOfInbalacne, bool whereNodeIB) {
-        Node<T>* childL = nodeIB->getLeft();
-        Node<T>* childR = nodeIB->getRight();
+    void balanceDBPlusOne(NodeKV<K,V>* nodeIB, bool sideOfInbalacne, bool whereNodeIB) {
+        NodeKV<K,V>* childL = nodeIB->getLeft();
+        NodeKV<K,V>* childR = nodeIB->getRight();
 
 
         if(sideOfInbalacne == LEFT) {
@@ -140,7 +139,7 @@ class AVLTree : public Tree<T> {
         balanceDBMinusOne(nodeIB,sideOfInbalacne,whereNodeIB);
     }
 
-    int delta(Node<T>* node) {
+    int delta(NodeKV<K,V>* node) {
         if(node == NULL)
             return 0;
         int lCh = node->getLeft() == NULL ? 0 : node->getLeft()->getHeight();
@@ -148,7 +147,7 @@ class AVLTree : public Tree<T> {
         return lCh - rCh;
     }
     //единственный минус не пересчитываем height
-    void nodeBalance(Node<T>* node) {
+    void nodeBalance(NodeKV<K,V>* node) {
         int d = delta(node);
 
         if(d < 2 && d > -2)
@@ -181,23 +180,23 @@ class AVLTree : public Tree<T> {
 
     }
 
-    void calcHeight(Node<T>* node) {
+    void calcHeight(NodeKV<K,V>* node) {
         if(node == NULL)
             return;
         int lCh = node->getLeft() == NULL ? 0 : node->getLeft()->getHeight();
         int rCh = node->getRight() == NULL ? 0 : node->getRight()->getHeight();
         node->setHeight(1 + max(lCh, rCh));
     }
-    Node<T>* Add_R(Node<T>* N, Node<T>* Current) override {
+    NodeKV<K,V>* Add_R(NodeKV<K,V>* N, NodeKV<K,V>* Current) override {
         if (N == NULL)
             return NULL;
 
-        if (Tree<T>::root == NULL) {
-            Tree<T>::root = N;
+        if (BinTreeKV<K,V>::root == NULL) {
+            BinTreeKV<K,V>::root = N;
             return N;
         }
 
-        if (Current->getData() > N->getData()) {
+        if (Current->getKey() > N->getKey()) {
             //идем влево
             if (Current->getLeft() != NULL)
                 Add_R(N, Current->getLeft());
@@ -207,7 +206,7 @@ class AVLTree : public Tree<T> {
             }
         }
 
-        if (Current->getData() < N->getData()) {
+        if (Current->getKey() < N->getKey()) {
             //идем вправо
             if (Current->getRight() != NULL)
                 Add_R(N, Current->getRight());
@@ -220,39 +219,25 @@ class AVLTree : public Tree<T> {
         nodeBalance(Current);
         calcHeight(Current);
         if(this->getRoot()->getParent() != NULL) {
-            Tree<T>::root = this->getRoot()->getParent();
+            BinTreeKV<K,V>::root = this->getRoot()->getParent();
 
         }
         return Current;
     }
 
-    Node<T>* Add_R(Node<T>* N) override {
+    NodeKV<K,V>* Add_R(NodeKV<K,V>* N) override {
         return Add_R(N,this->getRoot());
     }
 
 
 public:
 
-    virtual void Add(T data) override {
-        Node<T>* N = new Node<T>;
-        N->setData(data);
+    void Add(K key, V value) {
+        NodeKV<K,V>* N = new NodeKV<K,V>(key, value);
         Add_R(N);
     }
-    virtual Node<T>* Find(T data) {
-        return Tree<T>::Find(data, Tree<T>::root);
+    NodeKV<K,V>* Find(K key) {
+        return BinTreeKV<K,V>::Find(key, BinTreeKV<K,V>::root);
     }
 
 };
-
-
-//int main() {
-//    AVLTree<int> T = AVLTree<int>();
-//
-//    for (int i = 0; i < 6; i++)
-//        T.Add(i);
-//
-//    cout << T.getRoot()->getData();
-//    cout << T.Min(T.getRoot())->getData();
-//    cout << T.Find(3)->getData();
-//    return 0;
-//}

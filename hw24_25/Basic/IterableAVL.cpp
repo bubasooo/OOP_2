@@ -32,29 +32,29 @@ ostream& operator<< (ostream& stream, IterableAVL<T>& Tree) {
 }
 
 
-int main() {
-    IterableAVL<int> T = IterableAVL<int>();
-
-    for (int i = 0; i < 88; i++)
-        T.Add(i);
-    auto it = T.begin();
-//    auto it = TreeIterator<int>(T.Max(T.getRoot()));
-//    while(it != T.begin()) {
-//        cout << (*it).getData() << " ";
-//        it--;
-//    }
-    it++;
-    it++;
-    it++;
-    it++;
-    it++;
-    it++;
-    it++;
-    it--;
-    it--;
-
-
-    cout << (*it).getData();
-    //cout << T;
-    return 0;
-}
+//int main() {
+//    IterableAVL<int> T = IterableAVL<int>();
+//
+//    for (int i = 0; i < 88; i++)
+//        T.Add(i);
+//    auto it = T.begin();
+////    auto it = TreeIterator<int>(T.Max(T.getRoot()));
+////    while(it != T.begin()) {
+////        cout << (*it).getData() << " ";
+////        it--;
+////    }
+//    it++;
+//    it++;
+//    it++;
+//    it++;
+//    it++;
+//    it++;
+//    it++;
+//    it--;
+//    it--;
+//
+//
+//    cout << (*it).getData();
+//    //cout << T;
+//    return 0;
+//}

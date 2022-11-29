@@ -1,59 +1,65 @@
 //
-// Created by c4lculater on 29.11.2022.
+// Created by c4lculater on 30.11.2022.
 //
 
-#include <queue>
-#include <stack>
-#include "AVLTree.cpp"
 
-template<class T>
-class TreeIterator {
+#include <stack>
+#include "AVLTreeKV.cpp"
+
+template<class K, class V>
+class TreeIteratorKV {
 public:
 
-    TreeIterator() {}
-    TreeIterator(Node<T>* nodeO) {node = nodeO;}
+    TreeIteratorKV() {}
+    TreeIteratorKV(NodeKV<K,V>* nodeO) {node = nodeO;}
 
 
 
-    Node<T>& operator*() {
+    NodeKV<K,V>& operator*() {
         return (*node);
     }
 
-    TreeIterator<T>& operator++ () {
+    TreeIteratorKV<K,V>& operator++ () {
         node = getNext(node);
         return *this;
 
     }
-    TreeIterator<T>& operator ++ (int v) {
-        TreeIterator<T>* it = new TreeIterator<T>(node);
+    TreeIteratorKV<K,V>& operator ++ (int v) {
+        TreeIteratorKV<K,V>* it = new TreeIteratorKV<K,V>(node);
         node = getNext(node);
         return *it;
     }
-    TreeIterator& operator -- ()  {
+    TreeIteratorKV<K,V>& operator -- ()  {
         node = getPrevious(node);
         return *this;
     }
-    TreeIterator& operator -- (int v)  {
-        TreeIterator<T>* it = new TreeIterator<T>(node);
+    TreeIteratorKV& operator -- (int v)  {
+        TreeIteratorKV<K,V>* it = new TreeIteratorKV<K,V>(node);
         node = getPrevious(node);
         return *it;
     }
 
-    bool operator != (TreeIterator<T> other) const {
+    bool operator != (TreeIteratorKV<K,V> other) const {
         return node != other.getNode();
     }
 
 
-    bool operator == (TreeIterator<T> other) const {
+    bool operator == (TreeIteratorKV<K,V> other) const {
         return !(this != other);
     }
 
-    Node<T>* getNode() {
+    NodeKV<K,V>* getNode() {
         return node;
     }
 
-    Node<T>* getNext(Node<T>* node) {
-        Node<T>* nextNode = NULL;
+
+private:
+    NodeKV<K,V>* node;
+    stack < NodeKV<K,V>* > sMax;
+    stack < NodeKV<K,V>* > sMin;
+
+    NodeKV<K,V>* getNext(NodeKV<K,V>* node) {
+        NodeKV<K,V>* nextNode = NULL;
         if(node->getRight() != NULL) {
             sMax.push(node);
             nextNode = node->getRight();
@@ -79,13 +85,9 @@ public:
 
         return nextNode;
     }
-private:
-    Node<T>* node;
-    stack < Node<T>* > sMax;
-    stack < Node<T>* > sMin;
 
-    Node<T>* getPrevious(Node<T>* node) {
-        Node<T>* nextNode = NULL;
+    NodeKV<K,V>* getPrevious(NodeKV<K,V>* node) {
+        NodeKV<K,V>* nextNode = NULL;
         if(node->getLeft() != NULL) {
             sMin.push(node);
             nextNode = node->getLeft();

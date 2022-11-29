@@ -1,28 +1,27 @@
 //
-// Created by c4lculater on 28.11.2022.
+// Created by c4lculater on 29.11.2022.
 //
 
+#include "NodeKV.cpp"
 
-#include "Node.cpp"
-
-template<class T>
-class Tree {
+template<class K, class V>
+class BinTreeKV {
 protected:
     //корень - его достаточно для хранения всего дерева
-    Node<T>* root;
+    NodeKV<K,V>* root;
 public:
     //доступ к корневому элементу
-    virtual Node<T>* getRoot() { return root; }
+    virtual NodeKV<K,V>* getRoot() { return root; }
 
     //конструктор дерева: в момент создания дерева ни одного узла нет, корень смотрит в никуда
-    Tree<T>() { root = NULL; }
+    BinTreeKV<K,V>() { root = NULL; }
 
     //рекуррентная функция добавления узла. Устроена аналогично, но вызывает сама себя - добавление в левое или правое поддерево
-    virtual Node<T>* Add_R(Node<T>* N) {
+    virtual NodeKV<K,V>* Add_R(NodeKV<K,V>* N) {
         return Add_R(N, root);
     }
 
-    virtual Node<T>* Add_R(Node<T>* N, Node<T>* Current) {
+    virtual NodeKV<K,V>* Add_R(NodeKV<K,V>* N, NodeKV<K,V>* Current) {
 
         if (N == NULL)
             return NULL;
@@ -32,7 +31,7 @@ public:
             return N;
         }
 
-        if (Current->getData() > N->getData()) {
+        if (Current->getKey() > N->getKey()) {
             //идем влево
             if (Current->getLeft() != NULL)
                 Current->setLeft(Add_R(N, Current->getLeft()));
@@ -41,7 +40,7 @@ public:
             Current->getLeft()->setParent(Current);
         }
 
-        if (Current->getData() < N->getData()) {
+        if (Current->getKey() < N->getKey()) {
             //идем вправо
             if (Current->getRight() != NULL)
                 Current->setRight(Add_R(N, Current->getRight()));
@@ -49,20 +48,24 @@ public:
                 Current->setRight(N);
             Current->getRight()->setParent(Current);
         }
-        if (Current->getData() == N->getData()); //нашли совпадение
+        //if (Current->getKey() == N->getKey()); //нашли совпадение
         //для несбалансированного дерева поиска
 
         return Current;
     }
 
-    //функция для добавления числа. Делаем новый узел с этими данными и вызываем нужную функцию добавления в дерево
-    virtual void Add(int n) {
-        Node<T>* N = new Node<T>;
-        N->setData(n);
+    void Add(K key, V value) {
+        NodeKV<K,V>* N = new NodeKV<K,V>(key,value);
         Add_R(N);
     }
+    //функция для добавления числа. Делаем новый узел с этими данными и вызываем нужную функцию добавления в дерево
+//    virtual void Add(int n) {
+//        NodeKV<K,V>* N = new NodeKV<K,V>;
+//        N->setData(n);
+//        Add_R(N);
+//    }
 
-    virtual Node<T>* Min(Node<T>* Current=NULL) { //минимум - это самый "левый" узел. Идём по дереву всегда влево
+    virtual NodeKV<K,V>* Min(NodeKV<K,V>* Current=NULL) { //минимум - это самый "левый" узел. Идём по дереву всегда влево
         if (root == NULL) return NULL;
         if(Current==NULL)
             Current = root;
@@ -71,7 +74,7 @@ public:
         return Current;
     }
 
-    virtual Node<T>* Max(Node<T>* Current = NULL) { //минимум - это самый "правый" узел. Идём по дереву всегда вправо
+    virtual NodeKV<K,V>* Max(NodeKV<K,V>* Current = NULL) { //минимум - это самый "правый" узел. Идём по дереву всегда вправо
         if (root == NULL) return NULL;
 
         if (Current == NULL)
@@ -82,21 +85,21 @@ public:
     }
 
     //поиск узла в дереве. Второй параметр - в каком поддереве искать, первый - что искать
-    virtual Node<T>* Find(T data, Node<T>* Current) {
+    virtual NodeKV<K,V>* FindByKey(K key, NodeKV<K,V>* Current) {
         //база рекурсии
         if (Current == NULL)
             return NULL;
-        if (Current->getData() == data)
+        if (Current->getKey() == key)
             return Current;
         //рекурсивный вызов
-        if (Current->getData() > data)
-            return Find(data,Current->getLeft());
-        if (Current->getData() < data)
-            return Find(data,Current->getRight());
+        if (Current->getKey() > key)
+            return FindByKey(key,Current->getLeft());
+        if (Current->getKey() < key)
+            return FindByKey(key,Current->getRight());
     }
 
     //три обхода дерева
-    virtual void PreOrder(Node<T>* N, void (*f)(Node<T>*)) {
+    virtual void PreOrder(NodeKV<K,V>* N, void (*f)(NodeKV<K,V>*)) {
         if (N != NULL)
             f(N);
         if (N != NULL && N->getLeft() != NULL)
@@ -106,7 +109,7 @@ public:
     }
 
     //InOrder-обход даст отсортированную последовательность
-    virtual void InOrder(Node<T>* N, void (*f)(Node<T>*)) {
+    virtual void InOrder(NodeKV<K,V>* N, void (*f)(NodeKV<K,V>*)) {
         if (N != NULL && N->getLeft() != NULL)
             InOrder(N->getLeft(), f);
         if (N != NULL)
@@ -116,7 +119,7 @@ public:
 
 
     }
-    virtual void PostOrder(Node<T>* N, void (*f)(Node<T>*)) {
+    virtual void PostOrder(NodeKV<K,V>* N, void (*f)(NodeKV<K,V>*)) {
         if (N != NULL && N->getLeft() != NULL)
             PostOrder(N->getLeft(), f);
         if (N != NULL && N->getRight() != NULL)
@@ -125,21 +128,3 @@ public:
             f(N);
     }
 };
-
-//int main() {
-//    Tree<double> T;
-//    int arr[15];
-//    int i = 0;
-//    for (i = 0; i < 15; i++)
-//        arr[i] = (int)(100 * (15 * double(i+1)));
-//    for (i = 0; i < 15; i++)
-//        T.Add(arr[i]);
-//    Node<double>* M = T.Min();
-//    cout << "\nMin = " << M->getData() << "\tFind " << arr[3] << ": " << T.Find(arr[3], T.getRoot());
-//    void (*f_ptr)(Node<double>*);
-//    f_ptr = print;
-//    cout << "\n-----\nInorder:";
-//    T.InOrder(T.getRoot(), f_ptr);
-//    char c; cin >> c;
-//    return 0;
-//}
