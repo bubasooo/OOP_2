@@ -99,8 +99,8 @@ class AVLTree : public Tree<T> {
         }
 
         movement(nodeIB, childR, sideOfInbalacne, childL);
-        if(parent != NULL)
-            connectNodes(parent, childR, whereNodeIB);
+
+        connectNodes(parent, childR, whereNodeIB);
 
         childR->setHeight(childR->getHeight() + 1);
         nodeIB->setHeight(nodeIB->getHeight() - 1);
@@ -119,8 +119,8 @@ class AVLTree : public Tree<T> {
         }
 
         movement(nodeIB, childR, sideOfInbalacne, childL);
-        if(parent != NULL)
-            connectNodes(parent, childR, whereNodeIB);
+
+        connectNodes(parent, childR, whereNodeIB);
 
         nodeIB->setHeight(nodeIB->getHeight() - 2);
     }
@@ -143,54 +143,11 @@ class AVLTree : public Tree<T> {
     int delta(Node<T>* node) {
         if(node == NULL)
             return 0;
-        int lCh = node->getLeft() == NULL ? 0 : node->getHeight();
-        int rCh = node->getRight() == NULL ? 0 : node->getHeight();
+        int lCh = node->getLeft() == NULL ? 0 : node->getLeft()->getHeight();
+        int rCh = node->getRight() == NULL ? 0 : node->getRight()->getHeight();
         return lCh - rCh;
     }
     //единственный минус не пересчитываем height
-//    void nodeBalance(Node<T>* node) {
-//        int d = delta(node);
-//
-//        if(d < 2 && d > -2)
-//            return;
-//
-//        bool whereNode;
-//        if(node->getParent() != NULL)
-//            whereNode = node == node->getParent()->getLeft() ? LEFT : RIGHT;
-//        else
-//            whereNode = true;
-//
-//        if(d == 2) {
-//            int dCh = delta(node->getLeft());
-//            if(dCh == 0)
-//                balanceDBZero(node,LEFT,whereNode);
-//            if(dCh == -1)
-//                balanceDBPlusOne(node,LEFT,whereNode);
-//            if(dCh == 1)
-//                balanceDBMinusOne(node,LEFT,whereNode);
-//        }
-//        if(d == -2) {
-//            int dCh = delta(node->getRight());
-//            if(dCh == 0)
-//                balanceDBZero(node,RIGHT,whereNode);
-//            if(dCh == 1)
-//                balanceDBPlusOne(node,RIGHT,whereNode);
-//            if(dCh == -1)
-//                balanceDBMinusOne(node,RIGHT,whereNode);
-//        }
-//
-//    }
-
-    void calcHeight(Node<T>* node) {
-        if(node == NULL)
-            return;
-        int lCh = node->getLeft() == NULL ? 0 : node->getLeft()->getHeight();
-        int rCh = node->getRight() == NULL ? 0 : node->getRight()->getHeight();
-        node->setHeight(1 + max(lCh, rCh));
-    }
-
-public:
-
     void nodeBalance(Node<T>* node) {
         int d = delta(node);
 
@@ -199,7 +156,7 @@ public:
 
         bool whereNode;
         if(node->getParent() != NULL)
-            whereNode = node == node->getParent()->getLeft() ? LEFT : RIGHT;
+            whereNode = (node == node->getParent()->getLeft()) ? LEFT : RIGHT;
         else
             whereNode = true;
 
@@ -223,13 +180,59 @@ public:
         }
 
     }
+
+    void calcHeight(Node<T>* node) {
+        if(node == NULL)
+            return;
+        int lCh = node->getLeft() == NULL ? 0 : node->getLeft()->getHeight();
+        int rCh = node->getRight() == NULL ? 0 : node->getRight()->getHeight();
+        node->setHeight(1 + max(lCh, rCh));
+    }
+
+public:
+
     Node<T>* Add_R(Node<T>* N, Node<T>* Current) override {
-        Node<T>* node = Tree<T>::Add_R(N,Current);
+        if (N == NULL)
+            return NULL;
+
+        if (Tree<T>::root == NULL) {
+            Tree<T>::root = N;
+            return N;
+        }
+
+        if (Current->getData() > N->getData()) {
+            //идем влево
+            if (Current->getLeft() != NULL)
+                Add_R(N, Current->getLeft());
+            else {
+                Current->setLeft(N);
+                Current->getLeft()->setParent(Current);
+            }
+        }
+
+        if (Current->getData() < N->getData()) {
+            //идем вправо
+            if (Current->getRight() != NULL)
+                //Current->setRight(Add_R(N, Current->getRight()));
+                Add_R(N, Current->getRight());
+            else {
+                Current->setRight(N);
+                Current->getRight()->setParent(Current);
+            }
+        }
+        //if (Current->getData() == N->getData()); //нашли совпадение
+        //для несбалансированного дерева поиска
+
+        //Node<T>* node = Tree<T>::Add_R(N,Current);
+//        nodeBalance(Current);
+//        calcHeight(Current);
         nodeBalance(Current);
         calcHeight(Current);
-        if(this->getRoot()->getParent() != NULL && Current == this->getRoot())
+        if(this->getRoot()->getParent() != NULL) { //Current == this->getRoot() &&
             Tree<T>::root = this->getRoot()->getParent();
-        return node;
+            //this->getRoot()->setParent(NULL);
+        }
+        return Current;
     }
     Node<T>* Add_R(Node<T>* N) override {
         return Add_R(N,this->getRoot());
@@ -245,14 +248,10 @@ public:
 
 int main() {
     AVLTree<int> T = AVLTree<int>();
-    int arr[4];
-    int i = 0;
-    for (i = 0; i < 4; i++)
-        arr[i] = i;
-    for (i = 0; i < 4; i++)
-        T.Add(arr[i]);
 
-    cout << T.getRoot()->getLeft()->getData();
+    for (int i = 0; i < 6; i++)
+        T.Add(i);
 
+    cout << T.getRoot()->getData();
     return 0;
 }

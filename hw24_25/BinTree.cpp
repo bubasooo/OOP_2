@@ -44,7 +44,7 @@ public:
         right = NULL;
         parent = NULL;
         data = 0;
-        height = 0;
+        height = 1;
     }
 
     virtual void print() {
