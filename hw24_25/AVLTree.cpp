@@ -188,9 +188,6 @@ class AVLTree : public Tree<T> {
         int rCh = node->getRight() == NULL ? 0 : node->getRight()->getHeight();
         node->setHeight(1 + max(lCh, rCh));
     }
-
-public:
-
     Node<T>* Add_R(Node<T>* N, Node<T>* Current) override {
         if (N == NULL)
             return NULL;
@@ -213,45 +210,49 @@ public:
         if (Current->getData() < N->getData()) {
             //идем вправо
             if (Current->getRight() != NULL)
-                //Current->setRight(Add_R(N, Current->getRight()));
                 Add_R(N, Current->getRight());
             else {
                 Current->setRight(N);
                 Current->getRight()->setParent(Current);
             }
         }
-        //if (Current->getData() == N->getData()); //нашли совпадение
-        //для несбалансированного дерева поиска
 
-        //Node<T>* node = Tree<T>::Add_R(N,Current);
-//        nodeBalance(Current);
-//        calcHeight(Current);
         nodeBalance(Current);
         calcHeight(Current);
-        if(this->getRoot()->getParent() != NULL) { //Current == this->getRoot() &&
+        if(this->getRoot()->getParent() != NULL) {
             Tree<T>::root = this->getRoot()->getParent();
-            //this->getRoot()->setParent(NULL);
+
         }
         return Current;
     }
+
     Node<T>* Add_R(Node<T>* N) override {
         return Add_R(N,this->getRoot());
     }
-    void Add(int n) override {
+
+
+public:
+
+    virtual void Add(T data) override {
         Node<T>* N = new Node<T>;
-        N->setData(n);
+        N->setData(data);
         Add_R(N);
+    }
+    virtual Node<T>* Find(T data) {
+        return Tree<T>::Find(data, Tree<T>::root);
     }
 
 };
 
 
-int main() {
-    AVLTree<int> T = AVLTree<int>();
-
-    for (int i = 0; i < 6; i++)
-        T.Add(i);
-
-    cout << T.getRoot()->getData();
-    return 0;
-}
+//int main() {
+//    AVLTree<int> T = AVLTree<int>();
+//
+//    for (int i = 0; i < 6; i++)
+//        T.Add(i);
+//
+//    cout << T.getRoot()->getData();
+//    cout << T.Min(T.getRoot())->getData();
+//    cout << T.Find(3)->getData();
+//    return 0;
+//}
