@@ -7,18 +7,23 @@ public:
     Nation() {}
     Nation name(string name0) {
         names = name0;
+        return *this;
     }
     Nation capital(string capital0) {
         capitals = capital0;
+        return *this;
     }
     Nation lang(string lang0) {
         langs = lang0;
+        return *this;
     }
     Nation populus(long populus0) {
         populuss = populus0;
+        return *this;
     }
     Nation square(long square0) {
         squares = square0;
+        return *this;
     }
 
     const string &getNames() const {

@@ -4,10 +4,12 @@
 
 #include "Nation.cpp"
 int main() {
-    BITree<int,string> tree = BITree<int, string>();
-    tree.add(2, "huk");
-    tree.add(4,"back");
-    tree.add(9, "i");
-    cout << tree;
+    //BITree<int,string> tree = BITree<int, string>();
+    BinTreeKV<int,string> tree = BinTreeKV<int,string>();
+    tree.Add(2, "huk");
+    tree.Add(4,"back");
+    tree.Add(9, "i");
+    tree.Delete(new NodeKV<int,string>(9,"lol"),tree.getRoot());
+    tree.showTree(tree.getRoot());
 
 }

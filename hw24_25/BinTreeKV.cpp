@@ -54,6 +54,108 @@ public:
         return Current;
     }
 
+    void swapNodes(NodeKV<K,V>* fNode, NodeKV<K,V>* sNode) {
+        NodeKV<K,V>* fParent = fNode->getParent();
+        NodeKV<K,V>* sParent = sNode->getParent();
+        NodeKV<K,V>* fLChild = fNode->getLeft();
+        NodeKV<K,V>* fRChild = fNode->getRight();
+        NodeKV<K,V>* sLChild = sNode->getLeft();
+        NodeKV<K,V>* sRChild = sNode->getRight();
+
+        if(fParent != NULL)
+            if (fParent->getLeft() == fNode)
+                fParent->setLeft(sNode);
+            else
+                fParent->setRight(sNode);
+        sNode->setParent(fParent);
+
+        if(sParent != NULL)
+            if(sParent->getLeft() == sNode)
+                sParent->setLeft(fNode);
+            else
+                sParent->setRight(fNode);
+        fNode->setParent(sParent);
+
+        if(fLChild != NULL)
+            fLChild->setParent(sNode);
+        sNode->setLeft(fLChild);
+
+        if(fRChild != NULL)
+            fRChild->setParent(sNode);
+        sNode->setRight(fRChild);
+
+        if(sLChild != NULL)
+            sLChild->setParent(fNode);
+        fNode->setLeft(sLChild);
+
+        if(sRChild != NULL)
+            sRChild->setParent(fNode);
+        fNode->setRight(sRChild);
+
+    }
+
+    virtual NodeKV<K,V>* swapSuccessorAndDel(NodeKV<K,V>* delNode,NodeKV<K,V>* Current) {
+        if (Current->getLeft() == NULL) {
+            swapNodes(delNode, Current);
+            return deleteNode(delNode, true);
+        }
+
+        return swapSuccessorAndDel(delNode, Current->getLeft());
+    }
+
+    virtual NodeKV<K,V>* deleteNode(NodeKV<K,V>* Current,bool LR) {
+        if(Current->getRight() == NULL) {
+            if (Current->getParent() != NULL) { //если не корень
+                if(LR) {
+                    NodeKV<K, V>* parent = Current->getParent();
+                    parent->setLeft(Current->getLeft());
+                    Current->getLeft()->setParent(parent);
+                    //delete(Current);
+                }
+                else {
+                    NodeKV<K, V>* parent = Current->getParent();
+                    parent->setRight(Current->getLeft());
+                    Current->getLeft()->setParent(parent);
+                    //delete(Current);
+                }
+            }
+            else { //если корент
+                root = Current->getLeft();
+                Current->getLeft()->setParent(NULL);
+                //delete(Current);
+            }
+            return Current;
+        }
+
+        return swapSuccessorAndDel(Current, Current->getRight());
+    }
+
+    virtual NodeKV<K,V>* Delete(NodeKV<K,V>* delNode, NodeKV<K,V>* Current) {
+
+        if(Current->getKey() == delNode->getKey()) {
+            if(Current->getParent()->getLeft() == Current)
+                return deleteNode(Current, true);
+            else
+                return deleteNode(Current,false);
+        }
+
+        if (Current->getKey() > delNode->getKey()) {
+            //идем влево
+            if (Current->getLeft() != NULL)
+                return Delete(delNode, Current->getLeft());
+        }
+
+        if (Current->getKey() < delNode->getKey()) {
+            //идем вправо
+            if (Current->getRight() != NULL)
+                return Delete(delNode, Current->getRight());
+        }
+
+        return NULL;
+    }
+
+
+
     void Add(K key, V value) {
         NodeKV<K,V>* N = new NodeKV<K,V>(key,value);
         Add_R(N);
@@ -127,4 +229,13 @@ public:
         if (N != NULL)
             f(N);
     }
+
+    void showTree(NodeKV<K,V>* localRoot) {
+        if(localRoot != NULL) {
+            showTree(localRoot->getLeft());
+            cout << "KEY: " << localRoot->getKey() << " VALUE: " << localRoot->getValue() << '\n';
+            showTree(localRoot->getRight());
+        }
+    }
+
 };
