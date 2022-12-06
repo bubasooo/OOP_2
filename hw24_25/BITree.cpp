@@ -26,4 +26,8 @@ public:
         return IterableAVLKV<K,V>::Max(this->getRoot());
     }
 
+    virtual NodeKV<K,V>* deleteByKey(K key) {
+        return IterableAVLKV<K,V>::Delete(key);
+    }
+
 };

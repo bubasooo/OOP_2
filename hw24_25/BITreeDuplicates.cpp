@@ -26,6 +26,30 @@ public:
             }
             return lst;
         }
+    }
 
+    NodeKV<K,V>* deleteByKey(K key) override {
+        NodeDupl<K,V>* delNode = searchByKey(key);
+        if(delNode == NULL)
+            return NULL;
+
+        if(delNode->getSameKeys() == NULL)
+            return deleteByKey(key);
+
+        NodeDupl<K,V> parent = delNode->getParent();
+        NodeDupl<K,V> lChild = delNode->getLeft();
+        NodeDupl<K,V> rChild = delNode->getRight();
+        NodeDupl<K,V> successor = delNode->getSameKeys();
+
+        AVLTreeKV<K,V>::disconnectNode(delNode);
+        if(parent.getRight() == delNode)
+            AVLTreeKV<K,V>::connectNodes(parent, true);
+        else
+            AVLTreeKV<K,V>::connectNodes(parent, false);
+
+        AVLTreeKV<K,V>::connectNodes(successor, lChild, true);
+        AVLTreeKV<K,V>::connectNodes(successor, rChild, false);
+
+        return delNode;
     }
 };

@@ -5,7 +5,7 @@
 
 template<class K,class V>
 class AVLTreeKV : public BinTreeKV<K,V> {
-
+protected:
     const bool LEFT = true;
     const bool RIGHT = false;
     //delta(a) = h(La) - h(Ra)
@@ -230,6 +230,7 @@ class AVLTreeKV : public BinTreeKV<K,V> {
     }
 
 
+
 public:
 
     void Add(K key, V value) {
@@ -238,6 +239,9 @@ public:
     }
     NodeKV<K,V>* Find(K key) {
         return BinTreeKV<K,V>::Find(key, BinTreeKV<K,V>::root);
+    }
+    NodeKV<K,V>* Delete(K key) {
+        return BinTreeKV<K,V>::Delete(new NodeKV<K,V>(key));
     }
 
 };
