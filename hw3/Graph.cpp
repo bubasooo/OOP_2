@@ -49,6 +49,12 @@ public:
         }
     }
 
+    vector<pair<int,pair<int,int > > > getOstov() {
+        if(ostov.size() == 0)
+            minOstov();
+        return ostov;
+    }
+
     vector<int> deysktra(int startV) {
         vector<int> distanceDeyskstra(V,INF);
         priority_queue<pair<int,int> > q;
